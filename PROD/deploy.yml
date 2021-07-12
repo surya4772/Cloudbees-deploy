@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hackathon-deployment-prod
+  labels:
+    app: hackathon-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hackathon-prod
+  template:
+    metadata:
+      labels:
+        app: hackathon-prod
+    spec:
+      containers:
+      - name: appscd
+        image: hackathonpod2/gameoflife-new
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cd-service-prod
+  labels:
+    app: hackathon-prod
+spec:
+  selector:
+    app: hackathon-prod
+  type: LoadBalancer
+  ports:
+    - port: 8080
